@@ -12,20 +12,23 @@ import states.PlayState;
 class Stage extends FlxTypedGroup<FlxBasic>
 {
 	public var defaultCamZoom(never, set):Float;
+	public var addGirlfriend:Bool = true;
 
 	function set_defaultCamZoom(value:Float):Float
 	{
 		PlayState.defaultCamZoom = value;
 		return value;
 	}
-	public var stageBuild:ForeverModule;
+	public var stageModule:ForeverModule;
 	public var foreground:FlxTypedGroup<FlxBasic>;
+	public var layers:FlxTypedGroup<FlxBasic>;
 
 	public function new(stage:String, ?camPos:FlxPoint)
 	{
 		super();
 
 		foreground = new FlxTypedGroup<FlxBasic>();
+		layers = new FlxTypedGroup<FlxBasic>();
 
 		var exposure:StringMap<Dynamic> = new StringMap<Dynamic>();
 		exposure.set('add', add);
@@ -33,9 +36,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		exposure.set('foreground', foreground);
 		if (camPos != null)
 			exposure.set('camPos', camPos);
-		stageBuild = ScriptHandler.loadModule('$stage', 'stages/$stage', exposure);
-		if (stageBuild.exists("onCreate"))
-			stageBuild.get("onCreate")();
+		stageModule = ScriptHandler.loadModule('$stage', 'stages/$stage', exposure);
+		if (stageModule.exists("onCreate"))
+			stageModule.get("onCreate")();
 		trace('$stage loaded successfully');
 	}
 
@@ -43,24 +46,24 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	{
 		super.update(elapsed);
 
-		if (stageBuild.exists("onUpdate"))
-			stageBuild.get("onUpdate")(elapsed);
+		if (stageModule.exists("onUpdate"))
+			stageModule.get("onUpdate")(elapsed);
 	}
 
 	public function onStep(curStep:Int) {
-		if (stageBuild.exists("onStep"))
-			stageBuild.get("onStep")(curStep);
+		if (stageModule.exists("onStep"))
+			stageModule.get("onStep")(curStep);
 	}
 
 	public function onBeat(curBeat:Int)
 	{
-		if (stageBuild.exists("onBeat"))
-			stageBuild.get("onBeat")(curBeat);
+		if (stageModule.exists("onBeat"))
+			stageModule.get("onBeat")(curBeat);
 	}
 
 	public function dispatchEvent(myEvent:String)
 	{
-		if (stageBuild.exists("onEvent"))
-			stageBuild.get("onEvent")(myEvent);
+		if (stageModule.exists("onEvent"))
+			stageModule.get("onEvent")(myEvent);
 	}
 }

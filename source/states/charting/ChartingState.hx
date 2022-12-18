@@ -250,7 +250,7 @@ class ChartingState extends MusicBeatState
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 
-		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		var characters:Array<String> = CoolUtil.returnAssetsLibrary('characters', 'assets');
 
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
@@ -266,9 +266,24 @@ class ChartingState extends MusicBeatState
 		});
 		player2DropDown.selectedLabel = _song.player2;
 
-		var assetModifiers:Array<String> = CoolUtil.returnAssetsLibrary('UI/default');
+		var player3DropDown = new FlxUIDropDownMenu(player1DropDown.x, player1DropDown.y + 30, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		{
+			_song.gfVersion = characters[Std.parseInt(character)];
+			updateHeads();
+		});
+		player3DropDown.selectedLabel = _song.gfVersion;
 
-		var assetModifierDropDown = new FlxUIDropDownMenu(player2DropDown.x, player2DropDown.y + 40, FlxUIDropDownMenu.makeStrIdLabelArray(assetModifiers, true), function(character:String)
+		var stages:Array<String> = CoolUtil.returnAssetsLibrary('stages', 'assets');
+
+		var stageSelectDropDown = new FlxUIDropDownMenu(player2DropDown.x, player2DropDown.y + 30, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String)
+		{
+			_song.stage = stages[Std.parseInt(stage)];
+		});
+		stageSelectDropDown.selectedLabel = _song.stage;
+
+		var assetModifiers:Array<String> = CoolUtil.returnAssetsLibrary('ui');
+
+		var assetModifierDropDown = new FlxUIDropDownMenu(player3DropDown.x, player3DropDown.y + 30, FlxUIDropDownMenu.makeStrIdLabelArray(assetModifiers, true), function(character:String)
 		{
 			_song.assetModifier = assetModifiers[Std.parseInt(character)];
 		});
@@ -293,11 +308,13 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(stepperBPM);
 		tab_group_song.add(stepperSpeed);
+		tab_group_song.add(assetModifierDropDown);
+		tab_group_song.add(stageSelectDropDown);
+		tab_group_song.add(player3DropDown);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(playTicksBf);
 		tab_group_song.add(playTicksDad);
-		tab_group_song.add(assetModifierDropDown);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();

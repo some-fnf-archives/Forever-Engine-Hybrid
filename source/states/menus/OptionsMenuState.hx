@@ -66,6 +66,7 @@ class OptionsMenuState extends MusicBeatState
 					['Controller Mode', getFromOption],
 					['Downscroll', getFromOption],
 					['Centered Notefield', getFromOption],
+					['Disable Reset Button', getFromOption],
 					['Ghost Tapping', getFromOption],
 					['', null],
 					['Text Settings', null],
@@ -104,6 +105,7 @@ class OptionsMenuState extends MusicBeatState
 					['', null],
 					['Filter', getFromOption],
 					['Disable Antialiasing', getFromOption],
+					['Flashing Lights', getFromOption],
 					['Reduced Movements', getFromOption],
 				]
 			]

@@ -139,15 +139,10 @@ class MainMenuState extends MusicBeatState
 		//
 	}
 
-	// var colorTest:Float = 0;
 	var selectedSomethin:Bool = false;
-	var counterControl:Float = 0;
 
 	override function update(elapsed:Float)
 	{
-		// colorTest += 0.125;
-		// bg.color = FlxColor.fromHSB(colorTest, 100, 100, 0.5);
-
 		var up = controls.UI_UP;
 		var down = controls.UI_DOWN;
 		var up_p = controls.UI_UP_P;
@@ -173,26 +168,6 @@ class MainMenuState extends MusicBeatState
 
 						FlxG.sound.play(Paths.sound('scrollMenu'));
 					}
-					/* idk something about it isn't working yet I'll rewrite it later
-						else
-						{
-							// paaaaaaaiiiiiiiinnnn
-							var curDir:Int = 0;
-							if (i == 0)
-								curDir = -1;
-							else if (i == 1)
-								curDir = 1;
-
-							if (counterControl < 2)
-								counterControl += 0.05;
-
-							if (counterControl >= 1)
-							{
-								curSelected += (curDir * (counterControl / 24));
-								if (curSelected % 1 == 0)
-									FlxG.sound.play(Paths.sound('scrollMenu'));
-							}
-					}*/
 
 					if (curSelected < 0)
 						curSelected = optionShit.length - 1;
@@ -202,11 +177,6 @@ class MainMenuState extends MusicBeatState
 				//
 			}
 		}
-		else
-		{
-			// reset variables
-			counterControl = 0;
-		}
 
 		if ((controls.ACCEPT) && (!selectedSomethin))
 		{
@@ -214,7 +184,8 @@ class MainMenuState extends MusicBeatState
 			selectedSomethin = true;
 			FlxG.sound.play(Paths.sound('confirmMenu'));
 
-			FlxFlicker.flicker(magenta, 0.8, 0.1, false);
+			if (Init.trueSettings.get("Flashing Lights"))
+				FlxFlicker.flicker(magenta, 0.8, 0.1, false);
 
 			menuItems.forEach(function(spr:FlxSprite)
 			{

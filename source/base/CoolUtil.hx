@@ -63,16 +63,20 @@ class CoolUtil
 	{
 		var libraryArray:Array<String> = [];
 
-		#if sys
-		var unfilteredLibrary = FileSystem.readDirectory('$subDir/$library');
-
-		for (folder in unfilteredLibrary)
+		// we "try" here as this has a chance of crashing @BeastlyGhost
+		return try
 		{
-			if (!folder.contains('.'))
-				libraryArray.push(folder);
+			for (folder in FileSystem.readDirectory('$subDir/$library'))
+				if (!folder.contains('.'))
+					libraryArray.push(folder);
+			libraryArray;
+		}
+		catch (e)
+		{
+			trace('$subDir/$library is returning null');
+			[];
 		}
 		trace(libraryArray);
-		#end
 
 		return libraryArray;
 	}
