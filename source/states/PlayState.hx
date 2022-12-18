@@ -1503,7 +1503,7 @@ class PlayState extends MusicBeatState
 		PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 		CoolUtil.killMusic([songMusic, vocals]);
 
-		// deliberately did not use the main.switchstate as to not unload the assetsdaList
+		// deliberately did not use the main.switchstate as to not unload the assets
 		FlxG.switchState(new PlayState());
 	}
 
