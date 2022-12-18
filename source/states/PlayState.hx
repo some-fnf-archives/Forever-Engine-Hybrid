@@ -72,10 +72,9 @@ class PlayState extends MusicBeatState
 	public static var dadOpponent:Character;
 	public static var boyfriend:Character;
 
-	public static var assetModifier:String = 'base';
+	public static var assetModifier:String = 'default';
 
 	private var unspawnNotes:Array<Note> = [];
-	private var ratingArray:Array<String> = [];
 	private var allSicks:Bool = true;
 
 	private var numberOfKeys:Int = 4;
@@ -166,7 +165,7 @@ class PlayState extends MusicBeatState
 
 		Timings.callAccuracy();
 
-		assetModifier = 'base';
+		assetModifier = 'default';
 
 		// stop any existing music tracks playing
 		resetMusic();
@@ -214,6 +213,8 @@ class PlayState extends MusicBeatState
 		if (SONG.assetModifier != null && SONG.assetModifier.length > 1)
 			assetModifier = SONG.assetModifier;
 
+		add(stageBuild.layers);
+		
 		add(dadOpponent);
 		add(boyfriend);
 
@@ -550,7 +551,7 @@ class PlayState extends MusicBeatState
 			// */
 
 			// RESET = Quick Game Over Screen
-			if (controls.RESET && !startingSong && !isStoryMode) 
+			if (controls.RESET && !Init.trueSettings.get("Disable Reset Button") && !startingSong && !isStoryMode) 
 				health = 0;
 
 			if (health <= 0 && startedCountdown)
@@ -1025,8 +1026,6 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	var animationsPlay:Array<Note> = [];
-
 	function popUpScore(baseRating:String, timing:Bool, strumline:Strumline, coolNote:Note)
 	{
 		// set up the rating
@@ -1101,7 +1100,7 @@ class PlayState extends MusicBeatState
 			var combo:ForeverSprite = comboGroup.recycle(ForeverSprite, function()
 			{
 				var newCombo:ForeverSprite = new ForeverSprite();
-				newCombo.loadGraphic(AssetManager.getAsset('ui/default/combo_numbers', IMAGE, 'images'), true, 100, 140);
+				newCombo.loadGraphic(AssetManager.getAsset('ui/$assetModifier/combo_numbers', IMAGE, 'images'), true, 100, 140);
 				newCombo.animation.add('-', [0]);
 				for (i in 0...10)
 					newCombo.animation.add('$i', [i + 1]);
@@ -1186,7 +1185,7 @@ class PlayState extends MusicBeatState
 		var curJudgement:ForeverSprite = judgementGroup.recycle(ForeverSprite, function()
 		{
 			var newJudgement:ForeverSprite = new ForeverSprite();
-			newJudgement.loadGraphic(AssetManager.getAsset('ui/default/judgements', IMAGE, 'images'), true, 500, 163);
+			newJudgement.loadGraphic(AssetManager.getAsset('ui/$assetModifier/judgements', IMAGE, 'images'), true, 500, 163);
 			newJudgement.animation.add('sick-perfect', [0]);
 			for (i in Timings.judgementsMap.keys())
 			{
@@ -1337,7 +1336,7 @@ class PlayState extends MusicBeatState
 		// /*
 		for (strumline in strumLines) {
 			for (character in strumline.characterList) {
-				if ((character.animation.curAnim.name.startsWith("idle") || character.animation.curAnim.name.startsWith("dance"))
+				if ((character != null && character.animation.curAnim.name.startsWith("idle") || character.animation.curAnim.name.startsWith("dance"))
 					&& (curBeat % 2 == 0))
 					character.dance();
 			}
@@ -1504,7 +1503,7 @@ class PlayState extends MusicBeatState
 		PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 		CoolUtil.killMusic([songMusic, vocals]);
 
-		// deliberately did not use the main.switchstate as to not unload the assets
+		// deliberately did not use the main.switchstate as to not unload the assetsdaList
 		FlxG.switchState(new PlayState());
 	}
 
@@ -1522,8 +1521,9 @@ class PlayState extends MusicBeatState
 		{
 			default:
 				// why did i name it the same thing bru
-				if (stageBuild.stageBuild.exists('songIntro'))
-					stageBuild.stageBuild.get('songIntro')();
+				// this was confusing sorry shubs :sob: @BeastlyGhost
+				if (stageBuild.stageModule.exists('songIntro'))
+					stageBuild.stageModule.get('songIntro')();
 				else
 					startCountdown();
 		}
@@ -1562,9 +1562,9 @@ class PlayState extends MusicBeatState
 			var introName:Array<String> = ['ready', 'set', 'go'];
 			var soundNames:Array<String> = ['intro3', 'intro2', 'intro1', 'introGo'];
 			for (intro in introName)
-				introArray.push(AssetManager.getAsset('ui/default/$intro', IMAGE, 'images'));
+				introArray.push(AssetManager.getAsset('ui/$assetModifier/$intro', IMAGE, 'images'));
 			for (sound in soundNames)
-				soundsArray.push(AssetManager.returnSound('assets/sounds/default/$sound.ogg'));
+				soundsArray.push(AssetManager.returnSound('assets/sounds/$assetModifier/$sound.ogg'));
 
 			var countdown:Int = -1;
 			startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)

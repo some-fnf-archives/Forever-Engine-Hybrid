@@ -356,7 +356,7 @@ class AlphaCharacter extends FlxSprite
 	{
 		super(x, y);
 		this.textSize = textSize;
-		tex = Paths.getSparrowAtlas('UI/default/alphabet');
+		tex = Paths.getSparrowAtlas('ui/default/alphabet');
 		frames = tex;
 		setOffsets = new FlxPoint();
 		posX = x;

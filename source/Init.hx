@@ -151,6 +151,18 @@ class Init extends FlxState
 			"Simplifies the judgement animations, displaying only one judgement / rating sprite at a time.",
 			NOT_FORCED
 		],
+		'Disable Reset Button' => [
+			false,
+			Checkmark,
+			'Whether to disable the quick game over button (RESET).',
+			NOT_FORCED
+		],
+		"Flashing Lights" => [
+			true,
+			Checkmark,
+			"Whether flashing lights should be visible during gameplay, disable if you feel uncomfortable with them.",
+			NOT_FORCED
+		]
 	];
 
 	public static var trueSettings:Map<String, Dynamic> = [];
