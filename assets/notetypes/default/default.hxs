@@ -1,0 +1,65 @@
+function generateReceptor(receptor:Receptor) {
+	receptor.frames = getAsset('NOTE_assets', 'sparrow');
+	var stringSect:String = getNoteDirection();
+	receptor.animation.addByPrefix('static', 'arrow' + stringSect.toUpperCase());
+	receptor.animation.addByPrefix('pressed', stringSect + ' press', 24, false);
+	receptor.animation.addByPrefix('confirm', stringSect + ' confirm', 24, false);
+	// receptor.addOffset('confirm', 62, 62);
+	receptor.playAnim('static');
+}
+
+function generateSplash(noteSplash:ForeverSprite, noteData:Int) {
+	noteSplash.loadGraphic(Paths.image('noteSplashes'), true, 210, 210);
+	noteSplash.animation.add('anim1', [
+		(noteData * 2 + 1),
+		8 + (noteData * 2 + 1),
+		16 + (noteData * 2 + 1),
+		24 + (noteData * 2 + 1),
+		32 + (noteData * 2 + 1)
+	], 24, false);
+	noteSplash.animation.add('anim2', [
+		(noteData * 2),
+		8 + (noteData * 2),
+		16 + (noteData * 2),
+		24 + (noteData * 2),
+		32 + (noteData * 2)
+	], 24, false);
+	// noteSplash.addOffset('anim1', -20, -10);
+	// noteSplash.addOffset('anim2', -20, -10);
+	noteSplash.playAnim('anim' + FlxG.random.int(1, 2));
+	noteSplash.alpha = 0.6;
+
+	// positioning stuff
+	noteSplash.x -= noteSplash.width / 4;
+	noteSplash.y -= noteSplash.height / 4;
+}
+
+function generateNote(note:Note) {
+	note.frames = getAsset('NOTE_assets', 'sparrow');
+	note.animation.addByPrefix('greenScroll', 'green0');
+	note.animation.addByPrefix('redScroll', 'red0');
+	note.animation.addByPrefix('blueScroll', 'blue0');
+	note.animation.addByPrefix('purpleScroll', 'purple0');
+
+	var stringSect:String = getNoteColor();
+	note.playAnim(stringSect+'Scroll');
+}
+
+function generateSustain(note:Note) {
+	note.frames = getAsset('NOTE_assets', 'sparrow');
+	note.animation.addByPrefix('purplehold', 'purple hold piece');
+	note.animation.addByPrefix('greenhold', 'green hold piece');
+	note.animation.addByPrefix('redhold', 'red hold piece');
+	note.animation.addByPrefix('bluehold', 'blue hold piece');
+	//
+	note.animation.addByPrefix('purpleholdend', 'pruple end hold');
+	note.animation.addByPrefix('greenholdend', 'green hold end');
+	note.animation.addByPrefix('redholdend', 'red hold end');
+	note.animation.addByPrefix('blueholdend', 'blue hold end');
+
+	var stringSect:String = getNoteColor();
+
+	note.playAnim(stringSect+'holdend');
+	if (note.prevNote != null && note.prevNote.isSustain)
+		note.prevNote.playAnim(stringSect+'hold');
+}

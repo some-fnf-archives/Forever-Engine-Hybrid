@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="mine_Explosions.png">
+	<!-- Created with Adobe Animate version 21.0.5.40714 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="mineExplosion0000" x="2" y="2" width="568" height="538" frameX="-24" frameY="-22" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0001" x="572" y="2" width="541" height="524" frameX="-40" frameY="-38" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0002" x="1115" y="2" width="594" height="560" frameX="-14" frameY="-15" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0003" x="1115" y="2" width="594" height="560" frameX="-14" frameY="-15" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0004" x="2" y="564" width="600" height="564" frameX="-15" frameY="-16" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0005" x="2" y="564" width="600" height="564" frameX="-15" frameY="-16" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0006" x="604" y="564" width="601" height="581" frameX="-14" frameY="-8" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0007" x="1207" y="564" width="601" height="581" frameX="-14" frameY="-8" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0008" x="2" y="1147" width="613" height="588" frameX="-4" frameY="-4" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0009" x="617" y="1147" width="607" height="590" frameX="-6" frameY="-3" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0010" x="1226" y="1147" width="615" height="596" frameX="0" frameY="0" frameWidth="617" frameHeight="596"/>
+	<SubTexture name="mineExplosion0011" x="1226" y="1147" width="615" height="596" frameX="0" frameY="0" frameWidth="617" frameHeight="596"/>
+</TextureAtlas>

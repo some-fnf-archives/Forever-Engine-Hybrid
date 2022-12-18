@@ -1,0 +1,45 @@
+
+var bg;
+var stageFront;
+var stageCurtains;
+
+function onCreate() {
+	stage.defaultCamZoom = 0.9;
+	bg = new FlxSprite(-600, -200);
+	bg.loadGraphic(getAsset('images/stageback.png', 'image'));
+	bg.antialiasing = true;
+	bg.scrollFactor.set(0.9, 0.9);
+	bg.active = false;
+
+	// add to the final array
+	add(bg);
+
+	stageFront = new FlxSprite(-650, 600);
+	stageFront.loadGraphic(getAsset('images/stagefront.png', 'image'));
+	stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+	stageFront.updateHitbox();
+	stageFront.antialiasing = true;
+	stageFront.scrollFactor.set(0.9, 0.9);
+	stageFront.active = false;
+
+	// add to the final array
+	add(stageFront);
+
+	stageCurtains = new FlxSprite(-500, -300);
+	stageCurtains.loadGraphic(getAsset('images/stagecurtains.png', 'image'));
+	stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+	stageCurtains.updateHitbox();
+	stageCurtains.antialiasing = true;
+	stageCurtains.scrollFactor.set(1.3, 1.3);
+	stageCurtains.active = false;
+
+	// add to the final array
+	add(stageCurtains);
+
+	PlayState.easeTime = 4;
+	PlayState.easeType = FlxEase.expoInOut;
+}
+
+function onUpdate(elapsed) {
+    
+}

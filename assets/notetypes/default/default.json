@@ -1,0 +1,18 @@
+{
+	"keyAmount": 4,
+	"separation": 160,
+	"size": 0.7,
+	"antialiasing": true,
+	"actions": [
+		"left",
+		"down",
+		"up",
+		"right"
+	],
+	"colors": [
+		"purple",
+		"blue",
+		"green",
+		"red"
+	]
+}

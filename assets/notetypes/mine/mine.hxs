@@ -1,0 +1,33 @@
+function generateNote(note:Note) {
+	note.loadGraphic(Paths.image('mines'), true, 133, 128);
+	note.animation.add('scroll', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 12, false);
+	note.lowPriority = true;
+	note.isMine = true;
+
+	note.offsetX = 8;
+	note.offsetY = 8;
+	note.playAnim('scroll');
+}
+
+function generateSplash(noteSplash:ForeverSprite, noteData:Int) {
+	noteSplash.frames = Paths.getSparrowAtlas('mine_Explosions');
+	noteSplash.animation.addByPrefix('splash', 'mineExplosion', 36, false);
+	noteSplash.setGraphicSize(Std.int(noteSplash.width * 0.5));
+	noteSplash.updateHitbox();
+	noteSplash.playAnim('splash');
+
+	noteSplash.x -= noteSplash.width / 3;
+	noteSplash.y -= noteSplash.height / 3;
+}
+
+function onUpdate(note:Note) {
+	note.angle = (note.stepTime - (Conductor.songPosition / Conductor.stepCrochet)) * 8;
+}
+
+function onHit(note:Note) {
+	
+}
+
+function onBeat(note:Note) {
+	note.playAnim('scroll');
+}
