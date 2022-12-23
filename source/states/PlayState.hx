@@ -1250,6 +1250,7 @@ class PlayState extends MusicBeatState
 			songMusic.play();
 			songMusic.onComplete = endSong;
 			vocals.play();
+			charactersDance(2);
 
 			resyncVocals();
 
