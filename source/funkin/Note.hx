@@ -177,6 +177,12 @@ class Note extends ForeverSprite
 			noteModule.get('onHit')(this);
 	}
 
+	public function noteMiss()
+	{
+		if (noteModule.exists('onMiss'))
+			noteModule.get('onMiss')(this);
+	}
+
 	public function stepHit()
 	{
 		if (noteModule.exists('onStep'))

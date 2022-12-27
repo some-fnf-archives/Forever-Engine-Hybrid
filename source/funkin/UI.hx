@@ -61,8 +61,7 @@ class UI extends FlxSpriteGroup
 		if (Init.trueSettings.get('Downscroll'))
 			barY = 64;
 
-		healthBarBG = new FlxSprite(0,
-			barY).loadGraphic(Paths.image('ui/default/healthBar'));
+		healthBarBG = new FlxSprite(0, barY).loadGraphic(Paths.image('ui/default/healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);

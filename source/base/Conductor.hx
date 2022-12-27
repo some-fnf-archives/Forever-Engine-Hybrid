@@ -8,7 +8,6 @@ import states.PlayState;
 
 using StringTools;
 
-
 /*
 	Stuff like this is why this is a mod engine and not a rewrite.
 	I'm not going to pretend to know what any of this does and I don't really have the motivation to

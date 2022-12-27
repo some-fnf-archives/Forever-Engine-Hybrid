@@ -1,9 +1,9 @@
-
 var bg;
 var stageFront;
 var stageCurtains;
 
-function onCreate() {
+function onCreate()
+{
 	stage.defaultCamZoom = 0.9;
 	bg = new FlxSprite(-600, -200);
 	bg.loadGraphic(getAsset('images/stageback.png', 'image'));
@@ -35,11 +35,6 @@ function onCreate() {
 
 	// add to the final array
 	add(stageCurtains);
-
-	PlayState.easeTime = 4;
-	PlayState.easeType = FlxEase.expoInOut;
 }
 
-function onUpdate(elapsed) {
-    
-}
+function onUpdate(elapsed) {}

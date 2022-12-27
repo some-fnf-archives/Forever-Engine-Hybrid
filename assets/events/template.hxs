@@ -1,27 +1,27 @@
 /**
-    Returns the Event Description for use with the Chart Editor
+	Returns the Event Description for use with the Chart Editor
 **/
 function returnDescription()
-    return "Template Event, Hides/Shows the Main Player's Icon.";
+	return "Template Event, Hides/Shows the Main Player's Icon.";
 
 /**
-    Specifies what should be done as soon as the chart loads in-game
+	Specifies what should be done as soon as the chart loads in-game
 **/
 function initFunction()
 {
-    // simply print "Hi!" on the console
-    trace("Hi!");
+	// simply print "Hi!" on the console
+	trace("Hi!");
 }
 
 /**
-    Specifies what should be done when this event is hit on the chart
+	Specifies what should be done when this event is hit on the chart
 **/
 function eventFunction()
 {
-    // for example, i'm going to hide the Player's Icon
-    var icon = PlayState.uiHUD.iconP1;
-    
-    // then hide it
-    if (PlayState.uiHUD.iconP1 != null)
-        icon.visible = !icon.visible;
+	// for example, i'm going to hide the Player's Icon
+	var icon = PlayState.uiHUD.iconP1;
+
+	// then hide it
+	if (PlayState.uiHUD.iconP1 != null)
+		icon.visible = !icon.visible;
 }

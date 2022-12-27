@@ -16,6 +16,8 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import states.*;
 import states.menus.*;
+import sys.thread.Mutex;
+import sys.thread.Thread;
 
 class PauseSubState extends MusicBeatSubState
 {
@@ -26,22 +28,22 @@ class PauseSubState extends MusicBeatSubState
 
 	var pauseMusic:FlxSound;
 
+	var mutex:Mutex;
+
 	public function new(x:Float, y:Float)
 	{
 		super();
-		#if debug
-		// trace('pause call');
-		#end
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
-		pauseMusic.volume = 0;
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
-
-		FlxG.sound.list.add(pauseMusic);
-
-		#if debug
-		// trace('pause background');
-		#end
+		mutex = new Mutex();
+		Thread.create(function()
+		{
+			mutex.acquire();
+			pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
+			pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+			FlxG.sound.list.add(pauseMusic);
+			pauseMusic.volume = 0;
+			mutex.release();
+		});
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0;
@@ -54,10 +56,6 @@ class PauseSubState extends MusicBeatSubState
 		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
 		levelInfo.updateHitbox();
 		add(levelInfo);
-
-		#if debug
-		// trace('pause info');
-		#end
 
 		var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
 		levelDifficulty.text += CoolUtil.difficultyFromNumber(PlayState.storyDifficulty);
@@ -97,47 +95,22 @@ class PauseSubState extends MusicBeatSubState
 			grpMenuShit.add(songText);
 		}
 
-		#if debug
-		// trace('change selection');
-		#end
-
 		changeSelection();
-
-		#if debug
-		// trace('cameras');
-		#end
-
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
-
-		#if debug
-		// trace('cameras done');
-		#end
 	}
 
 	override function update(elapsed:Float)
 	{
-		#if debug
-		// trace('call event');
-		#end
-
 		super.update(elapsed);
-
-		#if debug
-		// trace('updated event');
-		#end
 
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
 
 		if (upP)
-		{
 			changeSelection(-1);
-		}
 		if (downP)
-		{
 			changeSelection(1);
-		}
 
 		if (accepted)
 		{
@@ -159,14 +132,18 @@ class PauseSubState extends MusicBeatSubState
 						Main.switchState(this, new FreeplayState());
 			}
 		}
-		
-		if (pauseMusic.volume < 0.5)
-			pauseMusic.volume += 0.01 * elapsed;
+
+		if (pauseMusic != null && pauseMusic.playing)
+		{
+			if (pauseMusic.volume < 0.5)
+				pauseMusic.volume += 0.01 * elapsed;
+		}
 	}
 
 	override function destroy()
 	{
-		pauseMusic.destroy();
+		if (pauseMusic != null)
+			pauseMusic.destroy();
 
 		super.destroy();
 	}
@@ -175,16 +152,15 @@ class PauseSubState extends MusicBeatSubState
 	{
 		curSelected += change;
 
+		if (change != 0)
+			FlxG.sound.play(AssetManager.getAsset('scrollMenu', SOUND, 'sounds'));
+
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
 		if (curSelected >= menuItems.length)
 			curSelected = 0;
 
 		var bullShit:Int = 0;
-
-		#if debug
-		// trace('mid selection');
-		#end
 
 		for (item in grpMenuShit.members)
 		{
@@ -200,10 +176,6 @@ class PauseSubState extends MusicBeatSubState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
-
-		#if debug
-		// trace('finished selection');
-		#end
 		//
 	}
 }

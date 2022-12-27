@@ -37,7 +37,6 @@ class Section
 	}
 }
 
-
 typedef SwagSong =
 {
 	var song:String;
