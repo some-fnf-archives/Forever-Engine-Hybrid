@@ -12,6 +12,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxGradient;
 import flixel.util.FlxGradient;
+
 /**
  * A class that truncates/adds several functions and utilities
  * such as storing song time, simple depth sorting & offsetting functionality to the FlxSprite class

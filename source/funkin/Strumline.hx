@@ -76,7 +76,7 @@ class Strumline extends FlxSpriteGroup
 		add(receptors);
 		add(notesGroup);
 
-		if (displayJudgement)
+		if (displayJudgement && !Init.trueSettings.get("Disable Note Splashes"))
 		{
 			noteSplashes = new FlxTypedSpriteGroup<ForeverSprite>();
 			add(noteSplashes);
@@ -130,6 +130,8 @@ class Receptor extends ForeverSprite
 	public var noteData:Int;
 	public var noteType:String;
 	public var action:String;
+
+	public var tweenAlpha:Float = 1;
 
 	public var receptorData:ReceptorData;
 	public var noteModule:ForeverModule;

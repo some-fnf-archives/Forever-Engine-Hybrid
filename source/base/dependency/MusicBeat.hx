@@ -28,6 +28,7 @@ class MusicBeatState extends ForeverUIState
 	public var curBeat:Int = 0;
 
 	public static var myControls:Controls = new Controls('player1', KeyboardScheme.Solo);
+
 	public var controls:Controls = myControls;
 
 	override function create()

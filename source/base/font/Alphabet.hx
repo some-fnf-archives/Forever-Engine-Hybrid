@@ -137,9 +137,9 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 			var isNumber:Bool = AlphaCharacter.numbers.contains(character);
 			var isSymbol:Bool = AlphaCharacter.symbols.contains(character);
 
-			if ((AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1) 
-			|| (AlphaCharacter.numbers.contains(character)) 
-			|| (AlphaCharacter.symbols.contains(character)))
+			if ((AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1)
+				|| (AlphaCharacter.numbers.contains(character))
+				|| (AlphaCharacter.symbols.contains(character)))
 			{
 				if (xPosResetted)
 				{
@@ -161,9 +161,10 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0, number, textSize, canUnown);
 				number++;
 
-				if (isBold) {
+				if (isBold)
+				{
 					letter.createBold(character);
-				} 
+				}
 				else
 				{
 					if (isNumber)
@@ -319,7 +320,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 				x = FlxMath.lerp(x, xTo, elapsed * 6);
 		}
 
-		if (controllable) {
+		if (controllable)
+		{
 			for (i in members)
 				i.x = x + i.posX;
 		}
@@ -350,8 +352,9 @@ class AlphaCharacter extends FlxSprite
 
 	private var textSize:Float = 1;
 	var tex:FlxAtlasFrames;
+
 	public var posX:Float;
-	
+
 	public function new(x:Float, y:Float, number:Int, textSize:Float = 1, canUnown:Bool)
 	{
 		super(x, y);
@@ -366,12 +369,14 @@ class AlphaCharacter extends FlxSprite
 
 	var isBold:Bool = false;
 	var letter:String = '';
+
 	public function createBold(letter:String, ?unown:Bool)
 	{
 		isBold = true;
 		if (this.letter == '')
 			this.letter = letter;
-		if (alphabet.contains(letter.toLowerCase()) || numbers.contains(letter.toLowerCase()) || symbols.contains(letter.toLowerCase())) {
+		if (alphabet.contains(letter.toLowerCase()) || numbers.contains(letter.toLowerCase()) || symbols.contains(letter.toLowerCase()))
+		{
 			var isNumber:Bool = numbers.contains(letter);
 			var isSymbol:Bool = symbols.contains(letter);
 
@@ -434,8 +439,6 @@ class AlphaCharacter extends FlxSprite
 				scale.set(textSize, textSize);
 				updateHitbox();
 			}
-
-		
 		}
 		//
 		setOffsets.set(offset.x, offset.y);

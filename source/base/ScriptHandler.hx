@@ -60,6 +60,13 @@ class ScriptHandler
 		exp.set("Note", Note);
 		exp.set("Strumline", Strumline);
 		exp.set("PlayState", PlayState);
+
+		/**
+			maybe changing this to a single function
+			to allow people to only grab setting values @BeastlyGhost
+		**/
+		exp.set("Init", Init);
+
 		//  */
 
 		parser.allowTypes = true;

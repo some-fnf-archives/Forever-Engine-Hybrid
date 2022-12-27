@@ -19,6 +19,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		PlayState.defaultCamZoom = value;
 		return value;
 	}
+
 	public var stageModule:ForeverModule;
 	public var foreground:FlxTypedGroup<FlxBasic>;
 	public var layers:FlxTypedGroup<FlxBasic>;
@@ -50,7 +51,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			stageModule.get("onUpdate")(elapsed);
 	}
 
-	public function onStep(curStep:Int) {
+	public function onStep(curStep:Int)
+	{
 		if (stageModule.exists("onStep"))
 			stageModule.get("onStep")(curStep);
 	}

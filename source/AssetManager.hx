@@ -20,6 +20,7 @@ import sys.io.File;
 	var IMAGE = 'image';
 	var SPARROW = 'sparrow';
 	var SOUND = 'sound';
+	var MUSIC = 'music';
 	var FONT = 'font';
 	var DIRECTORY = 'directory';
 	var MODULE = 'module';
@@ -49,14 +50,14 @@ class AssetManager
 				return File.getContent(gottenPath);
 			case IMAGE:
 				return returnGraphic(gottenPath, false);
+			case SOUND | MUSIC:
+				var soundMusic:String = getPath(directory, group, SOUND);
+				return returnSound(soundMusic);
 			case SPARROW:
 				var graphicPath = getPath(directory, group, IMAGE);
-				// trace('sparrow graphic path $graphicPath');
 				var graphic:FlxGraphic = returnGraphic(graphicPath, false);
-				// trace('sparrow xml path $gottenPath');
 				return FlxAtlasFrames.fromSparrow(graphic, File.getContent(gottenPath));
 			default:
-				// trace('returning directory $gottenPath');
 				return gottenPath;
 		}
 		trace('returning null for $gottenPath');

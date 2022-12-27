@@ -27,8 +27,7 @@ class Character extends ForeverSprite
 	public function new(x:Float = 0, y:Float = 0)
 		super(x, y);
 
-	public function setCharacter(x:Float, y:Float, ?character:String = 'bf',
-	isPlayer:Bool = false):Character
+	public function setCharacter(x:Float, y:Float, ?character:String = 'bf', isPlayer:Bool = false):Character
 	{
 		curCharacter = character;
 		antialiasing = true;
@@ -37,14 +36,16 @@ class Character extends ForeverSprite
 		cameraOffset = new FlxPoint(0, 0);
 		characterOffset = new FlxPoint(0, 0);
 
-		if (FileSystem.exists(AssetManager.getPath('$character', 'characters/$character', MODULE))) {
+		if (FileSystem.exists(AssetManager.getPath('$character', 'characters/$character', MODULE)))
+		{
 			var exposure:StringMap<Dynamic> = new StringMap<Dynamic>();
 			exposure.set('character', this);
 			var character:ForeverModule = ScriptHandler.loadModule(character, 'characters/$character', exposure);
 			if (character.exists("loadAnimations"))
 				character.get("loadAnimations")();
 		}
-	 	else trace('something went wrong');
+		else
+			trace('something went wrong');
 
 		// reverse player flip
 		if (isPlayer)
@@ -53,7 +54,8 @@ class Character extends ForeverSprite
 		dance();
 
 		setPosition(x, y);
-		if (adjustPos) {
+		if (adjustPos)
+		{
 			this.x += characterOffset.x;
 			this.y += (characterOffset.y - (frameHeight * scale.y));
 		}
@@ -88,11 +90,11 @@ class Character extends ForeverSprite
 	}
 
 	public var danced:Bool = false;
+
 	public function dance(?forced:Bool = false)
 	{
 		// Left / Right dancing, think Skid & Pump
-		if (animation.getByName('danceLeft') != null 
-			&& animation.getByName('danceRight') != null)
+		if (animation.getByName('danceLeft') != null && animation.getByName('danceRight') != null)
 		{
 			danced = !danced;
 			if (danced)

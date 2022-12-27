@@ -35,52 +35,77 @@ class ChartLoader
 
 					for (songNotes in section.sectionNotes)
 					{
-						if (songNotes[1] != -1) {
+						if (songNotes[1] != -1)
+						{
 							var daStrumTime:Float = #if !neko songNotes[0] - Init.trueSettings['Offset'] /* - | late, + | early */ #else songNotes[0] #end;
 							var daNoteData:Int = Std.int(songNotes[1] % 4);
-	
-							var daNoteAlt:Int = 0;
+							var daNoteType:String = 'default';
+
+							// convert "Hurt Note"s to "Mine"s
 							if (songNotes.length > 2)
-								daNoteAlt = songNotes[3];
-	
+							{
+								if (Std.isOfType(songNotes[3], String))
+								{
+									switch (songNotes[3])
+									{
+										case "Hurt Note":
+											songNotes[3] = 'mine';
+										default:
+											songNotes[3] = 'default';
+									}
+									daNoteType = songNotes[3];
+								}
+							}
+
+							/**
+								for Cubii, I don't know whether notetypes work or not
+								so it's good to test the before anything
+
+								psych conversion SHOULD work for mines though
+								@BeastlyGhost
+							**/
+
 							// check the base section
 							var gottaHitNote:Bool = section.mustHitSection;
-	
+
 							// if the note is on the other side, flip the base section of the note
 							if (songNotes[1] > 3)
 								gottaHitNote = !section.mustHitSection;
-	
+
 							// define the note that comes before (previous note)
 							var oldNote:Note;
 							if (unspawnNotes.length > 0)
 								oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 							else // if it exists, that is
 								oldNote = null;
-	
+
 							// create the new note
-							var swagNote:Note = new Note(daStrumTime, daNoteData, 'default', gottaHitNote ? 1 : 0, false);
+							var swagNote:Note = new Note(daStrumTime, daNoteData, daNoteType, gottaHitNote ? 1 : 0, false);
 							unspawnNotes.push(swagNote);
-	
+
 							if (songNotes[2] > 0)
 							{
 								var susLength:Float = (songNotes[2] / Conductor.stepCrochet) + 1;
 								for (susNote in 0...Math.floor(susLength))
 								{
 									oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
-									var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, 'default', gottaHitNote ? 1 : 0, true, oldNote);
+									var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, daNoteType,
+										gottaHitNote ? 1 : 0, true, oldNote);
 									if (susNote == susLength - 1)
 										sustainNote.isSustainEnd = true;
 									unspawnNotes.push(sustainNote);
 								}
 							}
-						} else
+						}
+						else
 							pushEvent(songNotes, PlayState.eventList);
 					}
 				}
 
 			case 'event':
 				var eventList:Array<PlacedEvent> = [];
-				for (section in noteData) {
+				for (section in noteData)
+				{
 					for (songNotes in section.sectionNotes)
 						pushEvent(songNotes, eventList);
 				}
@@ -90,10 +115,12 @@ class ChartLoader
 		return unspawnNotes;
 	}
 
-	public static function pushEvent(note:Array<Dynamic>, myEventList:Array<PlacedEvent>) {
+	public static function pushEvent(note:Array<Dynamic>, myEventList:Array<PlacedEvent>)
+	{
 		var daStrumTime:Float = note[0] - Init.trueSettings['Offset']; // - | late, + | early
 		// event notes
-		if (Events.eventList.contains(note[2])) {
+		if (Events.eventList.contains(note[2]))
+		{
 			var mySelectedEvent:String = Events.eventList[Events.eventList.indexOf(note[2])];
 			if (mySelectedEvent != null)
 			{
@@ -102,7 +129,7 @@ class ChartLoader
 				var delay:Float = 0;
 				if (module.exists("returnDelay"))
 					delay = module.get("returnDelay")();
-				// 
+				//
 				var myEvent:PlacedEvent = {
 					timestamp: daStrumTime + (delay * Conductor.stepCrochet),
 					params: [note[3], note[4]],

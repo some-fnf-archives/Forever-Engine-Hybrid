@@ -117,13 +117,6 @@ class Init extends FlxState
 			NOT_FORCED,
 			['none', 'Deuteranopia', 'Protanopia', 'Tritanopia']
 		],
-		"Clip Style" => [
-			'stepmania',
-			Selector,
-			"Chooses a style for hold note clippings; StepMania: Holds under Receptors; FNF: Holds over receptors",
-			NOT_FORCED,
-			['StepMania', 'FNF']
-		],
 		"Framerate Cap" => [120, Selector, 'Define your maximum FPS.', NOT_FORCED, ['']],
 		"Opaque Arrows" => [
 			false,
@@ -139,18 +132,6 @@ class Init extends FlxState
 			NOT_FORCED
 		],
 		'Centered Notefield' => [false, Checkmark, "Center the notes, disables the enemy's notes."],
-		'Fixed Judgements' => [
-			false,
-			Checkmark,
-			"Fixes the judgements to the camera instead of to the world itself, making them easier to read.",
-			NOT_FORCED
-		],
-		'Simply Judgements' => [
-			false,
-			Checkmark,
-			"Simplifies the judgement animations, displaying only one judgement / rating sprite at a time.",
-			NOT_FORCED
-		],
 		'Disable Reset Button' => [
 			false,
 			Checkmark,
@@ -272,7 +253,7 @@ class Init extends FlxState
 		saveSettings();
 		updateAll();
 
-		if(FlxG.save.data.volume != null)
+		if (FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
 		if (FlxG.save.data.mute != null)
 			FlxG.sound.muted = FlxG.save.data.mute;

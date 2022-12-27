@@ -1,4 +1,5 @@
-function generateReceptor(receptor:Receptor) {
+function generateReceptor(receptor:Receptor)
+{
 	receptor.frames = getAsset('NOTE_assets', 'sparrow');
 	var stringSect:String = getNoteDirection();
 	receptor.animation.addByPrefix('static', 'arrow' + stringSect.toUpperCase());
@@ -6,9 +7,13 @@ function generateReceptor(receptor:Receptor) {
 	receptor.animation.addByPrefix('confirm', stringSect + ' confirm', 24, false);
 	// receptor.addOffset('confirm', 62, 62);
 	receptor.playAnim('static');
+
+	if (!Init.trueSettings.get("Opaque Arrows"))
+		receptor.tweenAlpha = 0.8;
 }
 
-function generateSplash(noteSplash:ForeverSprite, noteData:Int) {
+function generateSplash(noteSplash:ForeverSprite, noteData:Int)
+{
 	noteSplash.loadGraphic(Paths.image('noteSplashes'), true, 210, 210);
 	noteSplash.animation.add('anim1', [
 		(noteData * 2 + 1),
@@ -34,7 +39,8 @@ function generateSplash(noteSplash:ForeverSprite, noteData:Int) {
 	noteSplash.y -= noteSplash.height / 4;
 }
 
-function generateNote(note:Note) {
+function generateNote(note:Note)
+{
 	note.frames = getAsset('NOTE_assets', 'sparrow');
 	note.animation.addByPrefix('greenScroll', 'green0');
 	note.animation.addByPrefix('redScroll', 'red0');
@@ -42,10 +48,11 @@ function generateNote(note:Note) {
 	note.animation.addByPrefix('purpleScroll', 'purple0');
 
 	var stringSect:String = getNoteColor();
-	note.playAnim(stringSect+'Scroll');
+	note.playAnim(stringSect + 'Scroll');
 }
 
-function generateSustain(note:Note) {
+function generateSustain(note:Note)
+{
 	note.frames = getAsset('NOTE_assets', 'sparrow');
 	note.animation.addByPrefix('purplehold', 'purple hold piece');
 	note.animation.addByPrefix('greenhold', 'green hold piece');
@@ -59,7 +66,13 @@ function generateSustain(note:Note) {
 
 	var stringSect:String = getNoteColor();
 
-	note.playAnim(stringSect+'holdend');
+	note.playAnim(stringSect + 'holdend');
 	if (note.prevNote != null && note.prevNote.isSustain)
-		note.prevNote.playAnim(stringSect+'hold');
+		note.prevNote.playAnim(stringSect + 'hold');
+}
+
+function onUpdate(note:Note)
+{
+	if (note.isSustain && Init.trueSettings.get("Opaque Holds"))
+		note.alpha = 1;
 }

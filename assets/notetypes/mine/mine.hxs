@@ -1,4 +1,5 @@
-function generateNote(note:Note) {
+function generateNote(note:Note)
+{
 	note.loadGraphic(Paths.image('mines'), true, 133, 128);
 	note.animation.add('scroll', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 12, false);
 	note.lowPriority = true;
@@ -9,7 +10,8 @@ function generateNote(note:Note) {
 	note.playAnim('scroll');
 }
 
-function generateSplash(noteSplash:ForeverSprite, noteData:Int) {
+function generateSplash(noteSplash:ForeverSprite, noteData:Int)
+{
 	noteSplash.frames = Paths.getSparrowAtlas('mine_Explosions');
 	noteSplash.animation.addByPrefix('splash', 'mineExplosion', 36, false);
 	noteSplash.setGraphicSize(Std.int(noteSplash.width * 0.5));
@@ -20,14 +22,17 @@ function generateSplash(noteSplash:ForeverSprite, noteData:Int) {
 	noteSplash.y -= noteSplash.height / 3;
 }
 
-function onUpdate(note:Note) {
+function onUpdate(note:Note)
+{
 	note.angle = (note.stepTime - (Conductor.songPosition / Conductor.stepCrochet)) * 8;
 }
 
-function onHit(note:Note) {
-	
+function onHit(note:Note)
+{
+	PlayState.health -= 0.875;
 }
 
-function onBeat(note:Note) {
+function onBeat(note:Note)
+{
 	note.playAnim('scroll');
 }

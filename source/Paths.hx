@@ -43,8 +43,7 @@ class Paths
 			dumpExclusions.push(key);
 	}
 
-	public static var dumpExclusions:Array<String> = [
-	];
+	public static var dumpExclusions:Array<String> = [];
 
 	/// haya I love you for the base cache dump I took to the max
 	public static function clearUnusedMemory()
@@ -312,6 +311,7 @@ class Paths
 		return (FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library)));
 	}
 }
+
 class LocalPath
 {
 	public var localPath:String;
