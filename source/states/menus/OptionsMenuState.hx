@@ -380,7 +380,7 @@ class OptionsMenuState extends MusicBeatState
 						extrasMap.set(letter, checkmark);
 					case Init.SettingTypes.Selector:
 						// selector
-						var selector:Selector = new Selector(10, letter.y, letter.text, Init.gameSettings.get(letter.text)[4],
+						var selector:Selector = new Selector(10, letter.y, letter, Init.gameSettings.get(letter.text)[4],
 							(letter.text == 'Framerate Cap') ? true : false, false);
 
 						extrasMap.set(letter, selector);
