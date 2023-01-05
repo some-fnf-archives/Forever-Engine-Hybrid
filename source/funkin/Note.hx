@@ -57,6 +57,9 @@ class Note extends ForeverSprite
 	public var receptorData:ReceptorData;
 	public var noteModule:ForeverModule;
 
+	// used for keeping sustains sane for some reason, basically prevents bpm changes from messing with things - codist
+	private var initialStepCrochet:Float = Conductor.stepCrochet;
+
 	public function new(strumTime:Float, index:Int, noteType:String, strumline:Int, ?isSustain:Bool = false, ?prevNote:Note)
 	{
 		noteData = index;
@@ -119,7 +122,7 @@ class Note extends ForeverSprite
 				if (prevNote.isSustain)
 				{
 					// listen I dont know what i was doing but I was onto something
-					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((Conductor.stepCrochet / 100) * (1.07 / prevNote.receptorData.size)) * noteSpeed;
+					prevNote.scale.y = (prevNote.width / prevNote.frameWidth) * ((initialStepCrochet / 100) * (1.07 / prevNote.receptorData.size)) * noteSpeed;
 					prevNote.updateHitbox();
 					offsetX = prevNote.offsetX;
 				}
