@@ -21,7 +21,7 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 	public var fpsCap:Bool = false;
 	public var darkBG:Bool = false;
 
-	public function new(x:Float = 0, y:Float = 0, word:String, options:Array<String>, fpsCap:Bool = false, darkBG:Bool = false)
+	public function new(x:Float = 0, y:Float = 0, word:Alphabet, options:Array<String>, fpsCap:Bool = false, darkBG:Bool = false)
 	{
 		// call back the function
 		super(x, y);
@@ -29,9 +29,11 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 		this.options = options;
 		trace(options);
 
+		var wordWidth:Int = getWordWidth(word);
+
 		// oops magic numbers
-		var shiftX = 48;
-		var shiftY = 35;
+		var shiftX = 50;
+		var shiftY = 40;
 		// generate multiple pieces
 
 		this.fpsCap = fpsCap;
@@ -39,23 +41,23 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 
 		#if html5
 		// lol heres how we fuck with everyone
-		var lock = new FlxSprite(shiftX + ((word.length) * 50) + (shiftX / 4) + ((fpsCap) ? 20 : 0), shiftY);
+		var lock = new FlxSprite(2*shiftX + wordWidth shiftY);
 		lock.frames = Paths.getSparrowAtlas('menus/base/storymenu/campaign_menu_UI_assets');
 		lock.animation.addByPrefix('lock', 'lock', 24, false);
 		lock.animation.play('lock');
 		add(lock);
 		#else
-		leftSelector = createSelector(shiftX, shiftY, word, 'left');
-		rightSelector = createSelector(shiftX + ((word.length) * 50) + (shiftX / 4) + ((fpsCap) ? 20 : 0), shiftY, word, 'right');
+		leftSelector = createSelector(shiftX, shiftY, word.text, 'left');
+		rightSelector = createSelector(2*shiftX + wordWidth, shiftY, word.text, 'right');
 
 		add(leftSelector);
 		add(rightSelector);
 		#end
 
-		chosenOptionString = Init.trueSettings.get(word);
+		chosenOptionString = Init.trueSettings.get(word.text);
 		if (fpsCap || darkBG)
 		{
-			chosenOptionString = Std.string(Init.trueSettings.get(word));
+			chosenOptionString = Std.string(Init.trueSettings.get(word.text));
 			optionChosen = new Alphabet(FlxG.width / 2 + 200, shiftY + 20, chosenOptionString, false, false);
 		}
 		else
@@ -71,6 +73,7 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 
 		returnSelector.animation.addByPrefix('idle', 'arrow $dir', 24, false);
 		returnSelector.animation.addByPrefix('press', 'arrow push $dir', 24, false);
+		returnSelector.addOffset('idle', 0, 0);
 		returnSelector.addOffset('press', 0, -10);
 		returnSelector.playAnim('idle');
 
@@ -103,5 +106,18 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 		objectArray.push(object);
 		positionLog.push([object.x, object.y]);
 		return super.add(object);
+	}
+
+	function getWordWidth(word:Alphabet):Int {
+
+		var wordWidth:Int = 0;
+
+		for(char in 0...word.text.length)
+			if(word.text.charAt(char) == ' ') wordWidth += 40;
+
+		for(letter in word)
+			wordWidth += letter.frameWidth;
+
+		return wordWidth;
 	}
 }

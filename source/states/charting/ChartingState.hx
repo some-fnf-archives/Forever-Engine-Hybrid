@@ -502,6 +502,7 @@ class ChartingState extends MusicBeatState
 	}
 
 	var lastSongPos:Null<Float> = null;
+	var colSin:Float = 0;
 
 	override function update(elapsed:Float)
 	{
@@ -516,8 +517,18 @@ class ChartingState extends MusicBeatState
 		{
 			playedSound.push(false);
 		}
+		var foundSelectedNote:Bool = false;
 		curRenderedNotes.forEachAlive(function(note:Note)
 		{
+			if(curSelectedNote != null && !foundSelectedNote) {
+				if(note.strumTime == curSelectedNote[0] && Math.floor(note.x / GRID_SIZE) == curSelectedNote[1]) {
+					foundSelectedNote = true;
+					colSin += elapsed;
+					var color:Float = FlxMath.remapToRange(Math.abs(Math.sin(colSin * 2)), 0, 1, 0.35, 1);
+					note.color = FlxColor.fromRGBFloat(color, color, color);
+				}
+			}
+
 			if (note.strumTime < songMusic.time)
 			{
 				var data:Int = note.noteData % 4;
@@ -895,7 +906,7 @@ class ChartingState extends MusicBeatState
 
 			if (daSus > 0)
 			{
-				var sustainVis:FlxSprite = new FlxSprite(note.x + (GRID_SIZE / 2),
+				var sustainVis:FlxSprite = new FlxSprite(note.x + (GRID_SIZE / 2) - 4,
 					note.y + GRID_SIZE).makeGraphic(8, Math.floor(FlxMath.remapToRange(daSus, 0, Conductor.stepCrochet * 16, 0, gridBG.height)));
 				curRenderedSustains.add(sustainVis);
 			}
@@ -925,7 +936,7 @@ class ChartingState extends MusicBeatState
 
 		for (i in _song.notes[curSection].sectionNotes)
 		{
-			if (i.strumTime == note.strumTime && i.noteData % 4 == note.noteData)
+			if (i[0] == note.strumTime && i[1] == Math.floor(note.x / GRID_SIZE))
 				curSelectedNote = _song.notes[curSection].sectionNotes[swagNum];
 			swagNum += 1;
 		}
@@ -1019,7 +1030,7 @@ class ChartingState extends MusicBeatState
 			"song": _song
 		};
 
-		var data:String = Json.stringify(json);
+		var data:String = Json.stringify(json, '\t');
 
 		if ((data != null) && (data.length > 0))
 		{
