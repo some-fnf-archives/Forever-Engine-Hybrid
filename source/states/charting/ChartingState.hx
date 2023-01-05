@@ -91,6 +91,8 @@ class ChartingState extends MusicBeatState
 		super.create();
 
 		curSection = lastSection;
+		curBeat = Std.int(4 * curSection);
+		curStep = Std.int(4 * curBeat);
 
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
 		add(gridBG);
@@ -421,6 +423,9 @@ class ChartingState extends MusicBeatState
 		songMusic.play();
 		vocals.play();
 
+		songMusic.time = ((60 / _song.bpm) * 1000) * curBeat;
+		vocals.time = songMusic.time;
+
 		pauseMusic();
 
 		songMusic.onComplete = function()
@@ -549,11 +554,15 @@ class ChartingState extends MusicBeatState
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps));
 
-		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1))
+		if (curStep >= 16 * (curSection + 1))
 		{
 			if (_song.notes[curSection + 1] == null)
 				addSection();
 			changeSection(curSection + 1, false);
+		} else if (curStep < 16 * (curSection)) {
+			if (_song.notes[curSection - 1] == null)
+				addSection();
+			changeSection(curSection - 1, false);
 		}
 
 		FlxG.watch.addQuick('daBeat', curBeat);
@@ -700,6 +709,11 @@ class ChartingState extends MusicBeatState
 
 					vocals.time = songMusic.time;
 				}
+			}
+
+			if(songMusic.time < 0) {
+				songMusic.time = 0;
+				vocals.time = songMusic.time;
 			}
 		}
 
