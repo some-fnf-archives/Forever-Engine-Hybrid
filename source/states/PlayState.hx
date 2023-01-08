@@ -183,9 +183,14 @@ class PlayState extends MusicBeatState
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 
+		//create the dialogue camera
+		dialogueHUD = new FlxCamera();
+		dialogueHUD.bgColor.alpha = 0;
+
 		FlxG.cameras.reset(camGame);
-		FlxG.cameras.add(camHUD);
-		FlxCamera.defaultCameras = [camGame];
+		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(dialogueHUD, false);
+		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		// default song
 		if (SONG == null)
@@ -247,9 +252,9 @@ class PlayState extends MusicBeatState
 		add(camFollowPos);
 
 		// actually set the camera up
-		FlxG.camera.follow(camFollowPos, LOCKON, 1);
-		FlxG.camera.zoom = defaultCamZoom;
-		FlxG.camera.focusOn(camFollowPos.getPosition());
+		camGame.follow(camFollowPos, LOCKON, 1);
+		camGame.zoom = defaultCamZoom;
+		camGame.focusOn(camFollowPos.getPosition());
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
@@ -276,10 +281,6 @@ class PlayState extends MusicBeatState
 
 		add(judgementGroup);
 		add(comboGroup);
-
-		dialogueHUD = new FlxCamera();
-		dialogueHUD.bgColor.alpha = 0;
-		FlxG.cameras.add(dialogueHUD);
 
 		//
 		controls.setKeyboardScheme(None, false);
@@ -544,7 +545,7 @@ class PlayState extends MusicBeatState
 			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 
 			// handle the camera zooming
-			FlxG.camera.zoom = defaultCamZoom + gameBump;
+			camGame.zoom = defaultCamZoom + gameBump;
 			camHUD.zoom = hudCameraZoom + hudBump;
 			// /*
 			if (camZooming)
