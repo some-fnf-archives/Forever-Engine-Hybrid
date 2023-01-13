@@ -23,4 +23,6 @@ function loadAnimations() {
     character.addOffset("hairBlow", 45, -8);
     character.addOffset("hairFall", 0, -9);
     character.addOffset("scared", -2, -17);
+
+    character.isSpectator = true;
 }

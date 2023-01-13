@@ -71,6 +71,7 @@ class PlayState extends MusicBeatState
 
 	public static var dadOpponent:Character;
 	public static var boyfriend:Character;
+	public static var girlfriend:Character;
 
 	public static var assetModifier:String = 'default';
 
@@ -80,14 +81,11 @@ class PlayState extends MusicBeatState
 	private var numberOfKeys:Int = 4;
 	private var curSection:Int = 0;
 
-	public static var easeType:EaseFunction = FlxEase.sineInOut;
-	public static var easeTime:Int = 16;
-
 	public static var songDetails:String = "";
 	public static var detailsSub:String = "";
 	public static var detailsPausedText:String = "";
 
-	private var curSong:String = "";
+	public var gfSpeed:Int = 1;
 
 	public static var health:Float = 1; // mario
 	public static var combo:Int = 0;
@@ -150,6 +148,10 @@ class PlayState extends MusicBeatState
 
 	public var updateableScript:Array<ForeverModule> = [];
 
+	// judgement customization
+	public static var lockComboInHUD:Bool;
+	public static var comboPosition:FlxPoint;
+
 	override public function create()
 	{
 		super.create();
@@ -162,6 +164,8 @@ class PlayState extends MusicBeatState
 		combo = 0;
 		health = 1;
 		misses = 0;
+
+		lockComboInHUD = false;
 
 		defaultCamZoom = 1.05;
 		cameraSpeed = 1;
@@ -206,11 +210,14 @@ class PlayState extends MusicBeatState
 		judgementGroup = new FlxTypedGroup<ForeverSprite>();
 		comboGroup = new FlxTypedGroup<ForeverSprite>();
 
+		comboPosition = new FlxPoint(0, 0);
+
 		displayRating('sick', false, true);
 		popUpCombo(true);
 
 		dadOpponent = new Character().setCharacter(50, 850, SONG.player2);
 		boyfriend = new Character().setCharacter(750, 850, SONG.player1, true);
+		girlfriend = new Character().setCharacter(300, 750, SONG.gfVersion);
 
 		// set the camera position to the center of the stage
 		var camPos:FlxPoint = new FlxPoint(((dadOpponent.x + dadOpponent.width / 2) + (boyfriend.x + boyfriend.width / 2)) / 2,
@@ -222,16 +229,17 @@ class PlayState extends MusicBeatState
 		if (SONG.assetModifier != null && SONG.assetModifier.length > 1)
 			assetModifier = SONG.assetModifier;
 
+		if (dadOpponent.isSpectator)
+			dadOpponent.setPosition(girlfriend.x, girlfriend.y);
+		else if (stageBuild.addGirlfriend)
+			add(girlfriend);
+
 		add(stageBuild.layers);
 
 		add(dadOpponent);
 		add(boyfriend);
 
 		add(stageBuild.foreground);
-
-		// force them to dance
-		dadOpponent.dance();
-		boyfriend.dance();
 
 		// set song position before beginning
 		Conductor.songPosition = -(Conductor.crochet * 4);
@@ -279,6 +287,12 @@ class PlayState extends MusicBeatState
 		uiHUD.cameras = [camHUD];
 		//
 
+		if (lockComboInHUD)
+		{
+			judgementGroup.cameras = [camHUD];
+			comboGroup.cameras = [camHUD];
+		}
+
 		add(judgementGroup);
 		add(comboGroup);
 
@@ -297,7 +311,7 @@ class PlayState extends MusicBeatState
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		}
 
-		songIntroCutscene();
+		songCutscene(false);
 
 		Paths.clearUnusedMemory();
 	}
@@ -483,7 +497,6 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				// Conductor.songPosition = FlxG.sound.music.time;
 				Conductor.songPosition += elapsed * 1000;
 
 				if (!paused)
@@ -500,12 +513,7 @@ class PlayState extends MusicBeatState
 						// trace('MISSED FRAME');
 					}
 				}
-
-				// Conductor.lastSongPos = FlxG.sound.music.time;
-				// song shit for testing lols
 			}
-
-			// boyfriend.playAnim('singLEFT', true);
 			// */
 
 			if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null)
@@ -1195,9 +1203,8 @@ class PlayState extends MusicBeatState
 			//
 			return newJudgement;
 		});
-		curJudgement.alpha = 1;
-		if (cache)
-			curJudgement.alpha = 0;
+		curJudgement.alpha = cache ? 0 : 1;
+
 		curJudgement.zDepth = -Conductor.songPosition;
 		curJudgement.screenCenter();
 		curJudgement.animation.play(daRating + (late ? '-late' : '-early'));
@@ -1205,6 +1212,9 @@ class PlayState extends MusicBeatState
 			curJudgement.animation.play('sick-perfect');
 		curJudgement.antialiasing = true;
 		curJudgement.setGraphicSize(Std.int(curJudgement.frameWidth * 0.7));
+
+		curJudgement.x += comboPosition.x;
+		curJudgement.y += comboPosition.y;
 
 		curJudgement.acceleration.y = 550;
 		curJudgement.velocity.y = -FlxG.random.int(140, 175);
@@ -1250,7 +1260,6 @@ class PlayState extends MusicBeatState
 			songMusic.play();
 			songMusic.onComplete = endSong;
 			vocals.play();
-			charactersDance(2);
 
 			resyncVocals();
 
@@ -1283,13 +1292,11 @@ class PlayState extends MusicBeatState
 		// Updating Discord Rich Presence.
 		updateRPC(false);
 
-		curSong = songData.song;
 		songMusic = new FlxSound().loadEmbedded(Paths.inst(SONG.song), false, true);
 
+		vocals = new FlxSound();
 		if (SONG.needsVoices)
 			vocals = new FlxSound().loadEmbedded(Paths.voices(SONG.song), false, true);
-		else
-			vocals = new FlxSound();
 
 		FlxG.sound.list.add(songMusic);
 		FlxG.sound.list.add(vocals);
@@ -1342,10 +1349,20 @@ class PlayState extends MusicBeatState
 			{
 				if ((character != null
 					&& character.animation.curAnim.name.startsWith("idle")
-					|| character.animation.curAnim.name.startsWith("dance"))
+					|| character.animation.curAnim.name.startsWith("dance")
+					&& !character.animation.curAnim.name.startsWith("sing"))
 					&& (curBeat % 2 == 0))
 					character.dance();
 			}
+		}
+
+		if (girlfriend != null)
+		{
+			if ((girlfriend.animation.curAnim.name.startsWith("idle")
+				|| girlfriend.animation.curAnim.name.startsWith("dance")
+				&& !girlfriend.animation.curAnim.name.startsWith("sing"))
+				&& (curBeat % gfSpeed == 0))
+				girlfriend.dance();
 		}
 		//  */
 	}
@@ -1450,11 +1467,7 @@ class PlayState extends MusicBeatState
 
 		deaths = 0;
 
-		if (!isStoryMode)
-		{
-			Main.switchState(this, new FreeplayState());
-		}
-		else
+		if (isStoryMode)
 		{
 			// set the campaign's score higher
 			campaignScore += songScore;
@@ -1483,36 +1496,37 @@ class PlayState extends MusicBeatState
 				FlxG.save.flush();
 			}
 			else
-				songEndSpecificActions();
+				songCutscene(true);
+		}
+		else {
+			songCutscene(true);
 		}
 		//
 	}
 
-	private function songEndSpecificActions()
+	private function finishSongSequence()
 	{
-		switch (SONG.song.toLowerCase())
+		if (!isStoryMode)
 		{
-			default:
-				callDefaultSongEnd();
+			Main.switchState(this, new FreeplayState());
+		}
+		else
+		{
+			var difficulty:String = '-' + CoolUtil.difficultyFromNumber(storyDifficulty).toLowerCase();
+			difficulty = difficulty.replace('-normal', '');
+
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
+
+			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
+			CoolUtil.killMusic([songMusic, vocals]);
+
+			// deliberately did not use the main.switchstate as to not unload the assets
+			FlxG.switchState(new PlayState());
 		}
 	}
 
-	private function callDefaultSongEnd()
-	{
-		var difficulty:String = '-' + CoolUtil.difficultyFromNumber(storyDifficulty).toLowerCase();
-		difficulty = difficulty.replace('-normal', '');
-
-		FlxTransitionableState.skipNextTransIn = true;
-		FlxTransitionableState.skipNextTransOut = true;
-
-		PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
-		CoolUtil.killMusic([songMusic, vocals]);
-
-		// deliberately did not use the main.switchstate as to not unload the assets
-		FlxG.switchState(new PlayState());
-	}
-
-	public function songIntroCutscene()
+	public function songCutscene(atTheEnd:Bool = false)
 	{
 		inCutscene = true;
 		uiHUD.alpha = 0;
@@ -1522,20 +1536,25 @@ class PlayState extends MusicBeatState
 				strumline.receptors.members[i].alpha = 0;
 		}
 
-		switch (curSong.toLowerCase())
+		var funcToCall:String = atTheEnd ? 'songEnding' : 'songIntro';
+
+		switch (PlayState.SONG.song.toLowerCase())
 		{
 			default:
 				// why did i name it the same thing bru
 				// this was confusing sorry shubs :sob: @BeastlyGhost
-				if (stageBuild.stageModule.exists('songIntro'))
-					stageBuild.stageModule.get('songIntro')();
+				if (stageBuild.stageModule.exists(funcToCall))
+					stageBuild.stageModule.get(funcToCall)();
 				else
-					startCountdown();
+				{
+					if (atTheEnd)
+						finishSongSequence();
+					else
+						startCountdown();
+				}
 		}
 		//
 	}
-
-	public static var swagCounter:Int = 0;
 
 	public var displayCountdown:Bool = true;
 
@@ -1543,7 +1562,6 @@ class PlayState extends MusicBeatState
 	{
 		inCutscene = false;
 		Conductor.songPosition = -(Conductor.crochet * 5);
-		swagCounter = 0;
 
 		camHUD.visible = true;
 		// summon the notes
@@ -1596,6 +1614,7 @@ class PlayState extends MusicBeatState
 				countdown++;
 
 				FlxG.sound.play(soundsArray[countdown], 0.6);
+				charactersDance(curBeat);
 			}, 5);
 		}
 	}

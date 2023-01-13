@@ -20,8 +20,10 @@ class Character extends ForeverSprite
 	public var characterOffset:FlxPoint;
 	public var curCharacter:String;
 	public var holdTimer:Float = 0;
-	public var isPlayer:Bool = false;
 
+	public var isPlayer:Bool = false;
+	// might not be ideal. @BeastlyGhost
+	public var isSpectator:Bool = false;
 	public var adjustPos:Bool = true;
 
 	public function new(x:Float = 0, y:Float = 0)
@@ -29,9 +31,10 @@ class Character extends ForeverSprite
 
 	public function setCharacter(x:Float, y:Float, ?character:String = 'bf', isPlayer:Bool = false):Character
 	{
+		this.isPlayer = isPlayer;
+		isSpectator = character.startsWith('gf');
 		curCharacter = character;
 		antialiasing = true;
-		this.isPlayer = isPlayer;
 
 		cameraOffset = new FlxPoint(0, 0);
 		characterOffset = new FlxPoint(0, 0);
@@ -65,25 +68,28 @@ class Character extends ForeverSprite
 	override public function update(elapsed:Float)
 	{
 		// /*
-		if (!isPlayer)
+		if (animation.curAnim != null)
 		{
-			if (animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed;
-			if (holdTimer >= (Conductor.stepCrochet * 4) / 1000)
+			if (!isPlayer)
 			{
-				dance();
-				holdTimer = 0;
+				if (animation.curAnim.name.startsWith('sing'))
+					holdTimer += elapsed;
+				if (holdTimer >= (Conductor.stepCrochet * 4) / 1000)
+				{
+					dance();
+					holdTimer = 0;
+				}
 			}
-		}
-		else
-		{
-			if (animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed;
 			else
-				holdTimer = 0;
+			{
+				if (animation.curAnim.name.startsWith('sing'))
+					holdTimer += elapsed;
+				else
+					holdTimer = 0;
 
-			if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
-				dance(true);
+				if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
+					dance(true);
+			}
 		}
 		// */
 		super.update(elapsed);

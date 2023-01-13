@@ -36,16 +36,9 @@
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
 
-	<!--
-		if you ever want to preload specific asset folders, add them here
-		keep in mind that if you don't want said asset folders to be cleared by the game's paths system
-		simply add the files to Paths.hx, on the dumpExclusions array
-	-->
-
 	<source path="source" />
 	<assets path="assets" />
-	<assets path="assets/songs"/>
-	<assets path="assets/music" preload="true"/>
+
 	<assets path="FE-CrashDialog.exe" type="template" if="windows release" />
 
 	<!--<assets path="mods" />-->
@@ -57,8 +50,8 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
+
 	<haxelib name="discord_rpc" if="DISCORD_RPC"/>
-	<haxelib name="polymod"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
