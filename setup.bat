@@ -5,13 +5,12 @@ echo Press any key to install required libraries.
 pause >nul
 title FNF Setup - Installing libraries
 echo Installing haxelib libraries...
-haxelib install lime 7.8.0
+haxelib install lime
 haxelib install openfl
-haxelib install flixel 4.8.1
+haxelib install flixel
 haxelib install flixel-addons
 haxelib install flixel-ui
 haxelib install hscript
-haxelib install newgrounds
 haxelib run lime setup
 haxelib install flixel-tools
 title FNF Setup - User action required
@@ -19,11 +18,6 @@ cls
 haxelib run flixel-tools setup
 cls
 echo Make sure you have git installed. You can download it here: https://git-scm.com/downloads
-echo Press any key to install polymod.
-pause >nul
-title FNF Setup - Installing libraries
-haxelib git polymod https://github.com/larsiusprime/polymod.git
-cls
 echo Press any key to install discord rpc.
 pause >nul
 title FNF Setup - Installing libraries
