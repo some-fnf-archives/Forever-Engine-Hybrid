@@ -41,8 +41,6 @@
 
 	<assets path="FE-CrashDialog.exe" type="template" if="windows release" />
 
-	<!--<assets path="mods" />-->
-
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxedev set='webgl' if="html5" />
