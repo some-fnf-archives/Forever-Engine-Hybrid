@@ -525,8 +525,10 @@ class ChartingState extends MusicBeatState
 		var foundSelectedNote:Bool = false;
 		curRenderedNotes.forEachAlive(function(note:Note)
 		{
-			if(curSelectedNote != null && !foundSelectedNote) {
-				if(note.strumTime == curSelectedNote[0] && Math.floor(note.x / GRID_SIZE) == curSelectedNote[1]) {
+			if (curSelectedNote != null && !foundSelectedNote)
+			{
+				if (note.strumTime == curSelectedNote[0] && Math.floor(note.x / GRID_SIZE) == curSelectedNote[1])
+				{
 					foundSelectedNote = true;
 					colSin += elapsed;
 					var color:Float = FlxMath.remapToRange(Math.abs(Math.sin(colSin * 2)), 0, 1, 0.35, 1);
@@ -559,7 +561,9 @@ class ChartingState extends MusicBeatState
 			if (_song.notes[curSection + 1] == null)
 				addSection();
 			changeSection(curSection + 1, false);
-		} else if (curStep < 16 * (curSection)) {
+		}
+		else if (curStep < 16 * (curSection))
+		{
 			if (_song.notes[curSection - 1] == null)
 				addSection();
 			changeSection(curSection - 1, false);
@@ -711,7 +715,8 @@ class ChartingState extends MusicBeatState
 				}
 			}
 
-			if(songMusic.time < 0) {
+			if (songMusic.time < 0)
+			{
 				songMusic.time = 0;
 				vocals.time = songMusic.time;
 			}

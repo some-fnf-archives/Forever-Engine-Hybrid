@@ -41,14 +41,14 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 
 		#if html5
 		// lol heres how we fuck with everyone
-		var lock = new FlxSprite(2*shiftX + wordWidth shiftY);
+		var lock = new FlxSprite(2 * shiftX + wordWidth shiftY);
 		lock.frames = Paths.getSparrowAtlas('menus/base/storymenu/campaign_menu_UI_assets');
 		lock.animation.addByPrefix('lock', 'lock', 24, false);
 		lock.animation.play('lock');
 		add(lock);
 		#else
 		leftSelector = createSelector(shiftX, shiftY, word.text, 'left');
-		rightSelector = createSelector(2*shiftX + wordWidth, shiftY, word.text, 'right');
+		rightSelector = createSelector(2 * shiftX + wordWidth, shiftY, word.text, 'right');
 
 		add(leftSelector);
 		add(rightSelector);
@@ -108,14 +108,15 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 		return super.add(object);
 	}
 
-	function getWordWidth(word:Alphabet):Int {
-
+	function getWordWidth(word:Alphabet):Int
+	{
 		var wordWidth:Int = 0;
 
-		for(char in 0...word.text.length)
-			if(word.text.charAt(char) == ' ') wordWidth += 40;
+		for (char in 0...word.text.length)
+			if (word.text.charAt(char) == ' ')
+				wordWidth += 40;
 
-		for(letter in word)
+		for (letter in word)
 			wordWidth += letter.frameWidth;
 
 		return wordWidth;

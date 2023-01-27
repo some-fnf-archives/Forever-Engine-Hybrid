@@ -187,7 +187,7 @@ class PlayState extends MusicBeatState
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 
-		//create the dialogue camera
+		// create the dialogue camera
 		dialogueHUD = new FlxCamera();
 		dialogueHUD.bgColor.alpha = 0;
 
@@ -1498,7 +1498,8 @@ class PlayState extends MusicBeatState
 			else
 				songCutscene(true);
 		}
-		else {
+		else
+		{
 			songCutscene(true);
 		}
 		//
