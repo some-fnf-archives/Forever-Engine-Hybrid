@@ -23,6 +23,7 @@ jobs:
 
       - name: Installing Libraries
         run: |
+          haxelib install lime --silent
           haxe -cp ./actions -D analyzer-optimize -main Main --interp
 
       - name: Building
@@ -52,6 +53,7 @@ jobs:
 
       - name: Installing Libraries
         run: |
+          haxelib install lime --silent
           haxe -cp ./actions -D analyzer-optimize -main Main --interp
 
       - name: Building
@@ -81,6 +83,7 @@ jobs:
 
       - name: Installing Libraries
         run: |
+          haxelib install lime --silent
           haxe -cp ./actions -D analyzer-optimize -main Main --interp
 
       - name: Building
