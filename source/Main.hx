@@ -183,7 +183,7 @@ class Main extends Sprite
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/BeastlyGabi/FNF-Forever-Engine";
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/CrowPlexus/FNF-Forever-Engine";
 
 		if (!FileSystem.exists("crash/"))
 			FileSystem.createDirectory("crash/");
